@@ -40,24 +40,29 @@ const sendMessage = (chatId, message) =>
   });
 
 const TelegramController = async (req, res, next) => {
-  // console.log(JSON.stringify(req.body, null, 2));
-  if (req.body.message) {
-    const command = req.body.message.text;
-    const chat = req.body.message.chat.id;
-    getFullChat(chat);
-    switch (command) {
-      case '/help':
-        sendMessage(chat, helpCommand);
+  try {
+    // console.log(JSON.stringify(req.body, null, 2));
+    if (req.body.message) {
+      const command = req.body.message.text;
+      const chat = req.body.message.chat.id;
+      getFullChat(chat);
+      switch (command) {
+        case '/help':
+          sendMessage(chat, helpCommand);
+      }
+    } else if (req.body.inline_query) {
+      const command = req.body.inline_query.query;
+      const id = req.body.inline_query.id;
+      switch (command) {
+        case '/help':
+          answerInlineQuery(id, 'help', helpCommand);
+      }
     }
-  } else if (req.body.inline_query) {
-    const command = req.body.inline_query.query;
-    const id = req.body.inline_query.id;
-    switch (command) {
-      case '/help':
-        answerInlineQuery(id, 'help', helpCommand);
-    }
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
   }
-  res.sendStatus(200);
 };
 
 module.exports = TelegramController;
