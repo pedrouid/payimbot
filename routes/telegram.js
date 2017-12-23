@@ -1,5 +1,4 @@
 const request = require('request');
-const uuidv4 = require('uuid/v4');
 const { TELEGRAM_TOKEN } = require('../config');
 const { helpCommand } = require('../commands');
 
@@ -8,7 +7,7 @@ const baseUrl = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 const answerInlineQuery = (inlineQueryId, title, message) => {
   const inlineQueryResult = {
     type: 'article',
-    id: uuidv4(),
+    // id: uuidv4(),
     title,
     input_message_content: {
       message_text: message
