@@ -23,13 +23,11 @@ const answerInlineQuery = (inlineQueryId, title, message) => {
 };
 
 const getFullChat = chatId =>
-  request
-    .post(baseUrl + '/getFullChat', {
-      form: {
-        chat_id: chatId
-      }
-    })
-    .then(res => console.log(JSON.stringify(res, null, 2)));
+  request.post(baseUrl + '/getFullChat', {
+    form: {
+      chat_id: chatId
+    }
+  });
 
 const sendMessage = (chatId, message) =>
   request.post(baseUrl + '/sendMessage', {
