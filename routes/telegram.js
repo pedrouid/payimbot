@@ -54,6 +54,9 @@ const TelegramController = async (req, res, next) => {
       switch (command) {
         case '/help':
           sendMessage(chat, helpCommand);
+          break;
+        default:
+          break;
       }
     } else if (req.body.inline_query) {
       const command = req.body.inline_query.query;
@@ -61,6 +64,9 @@ const TelegramController = async (req, res, next) => {
       switch (command) {
         case '/help':
           answerInlineQuery(id, 'help', helpCommand);
+          break;
+        default:
+          break;
       }
     }
     res.sendStatus(200);
