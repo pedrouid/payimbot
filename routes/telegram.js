@@ -4,12 +4,21 @@ const { helpCommand } = require('../commands');
 
 const baseUrl = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 
-const getFullChat = chatId =>
-  request.post(baseUrl + '/getFullChat', {
-    form: {
-      chat_id: chatId
+const getChat = chatId =>
+  request.post(
+    baseUrl + '/getChat',
+    {
+      form: {
+        chat_id: chatId
+      }
+    },
+    (error, response, body) => {
+      if (error) {
+        console.error(error);
+      }
+      console.log(JSON.stringify(body, null, 2));
     }
-  });
+  );
 
 const sendMessage = (chatId, message) =>
   request.post(baseUrl + '/sendMessage', {
@@ -25,7 +34,7 @@ const TelegramController = async (req, res, next) => {
     if (req.body.message) {
       const command = req.body.message.text;
       const chat = req.body.message.chat.id;
-      getFullChat(chat);
+      getChat(chat);
       switch (command) {
         case '/help':
           sendMessage(chat, helpCommand);
