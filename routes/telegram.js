@@ -1,28 +1,63 @@
 const request = require('request');
+const uuidv4 = require('uuid/v4');
 const { TELEGRAM_TOKEN } = require('../config');
 const { helpCommand } = require('../commands');
 
 const baseUrl = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 
-const sendMessage = function (chatId, message) {
+const answerInlineQuery = (inlineQueryId, title, message) => {
+  const inlineQueryResult = {
+    type: 'article',
+    id: uuidv4(),
+    title,
+    input_message_content: {
+      message_text: message
+    }
+  };
+  request.post(baseUrl + '/answerInlineQuery', {
+    form: {
+      inline_query_id: inlineQueryId,
+      results: [inlineQueryResult]
+    }
+  });
+};
+
+const getFullChat = chatId =>
+  request
+    .post(baseUrl + '/getFullChat', {
+      form: {
+        chat_id: chatId
+      }
+    })
+    .then(res => console.log(JSON.stringify(res, null, 2)));
+
+const sendMessage = (chatId, message) =>
   request.post(baseUrl + '/sendMessage', {
     form: {
       chat_id: chatId,
       text: message
     }
   });
-};
 
 const TelegramController = async (req, res, next) => {
+  // console.log(JSON.stringify(req.body, null, 2));
   if (req.body.message) {
     const command = req.body.message.text;
     const chat = req.body.message.chat.id;
+    getFullChat(chat);
     switch (command) {
       case '/help':
         sendMessage(chat, helpCommand);
     }
+  } else if (req.body.inline_query) {
+    const command = req.body.inline_query.query;
+    const id = req.body.inline_query.id;
+    switch (command) {
+      case '/help':
+        answerInlineQuery(id, 'help', helpCommand);
+    }
   }
-  res.status(200).json({ message: 'hello world' });
+  res.sendStatus(200);
 };
 
 module.exports = TelegramController;
