@@ -1,5 +1,5 @@
 const request = require('request');
-const uuidv4 = require('uuid/uuidv4');
+const uuidv4 = require('uuid/v4');
 const { TELEGRAM_TOKEN } = require('../config');
 const { helpCommand } = require('../commands');
 
