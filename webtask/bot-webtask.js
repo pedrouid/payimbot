@@ -15,7 +15,7 @@ example
 
 To request money simply type:
 @payimbot /ask [amount] [currency]
-example 
+example
 @payimbot /ask 2.00 USD
 
 To view your balance simply type:
@@ -23,7 +23,7 @@ To view your balance simply type:
 
 If you have any problems contact us at payimbot@gmail.com`;
 
-var sendMessage = function(chatId, message) {
+var sendMessage = function (chatId, message) {
   request.post(baseUrl + '/sendMessage', {
     form: {
       chat_id: chatId,
@@ -32,7 +32,7 @@ var sendMessage = function(chatId, message) {
   });
 };
 
-module.exports = function(context, cb) {
+module.exports = function (context, cb) {
   console.log(context.data);
   if (!context.data.message) {
     cb(null, { status: 'inline' });
@@ -48,4 +48,3 @@ module.exports = function(context, cb) {
     cb(null, { status: 'ok' });
   }
 };
-
