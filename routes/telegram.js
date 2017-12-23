@@ -38,8 +38,8 @@ const sendMessage = (chatId, message) =>
   });
 
 const TelegramController = async (req, res, next) => {
+  console.log(JSON.stringify(req.body, null, 2));
   try {
-    // console.log(JSON.stringify(req.body, null, 2));
     if (req.body.message) {
       const command = req.body.message.text;
       const chat = req.body.message.chat.id;
