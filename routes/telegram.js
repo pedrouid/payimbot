@@ -1,4 +1,5 @@
 const request = require('request');
+const uuidv4 = require('uuid/uuidv4');
 const { TELEGRAM_TOKEN } = require('../config');
 const { helpCommand } = require('../commands');
 
@@ -7,7 +8,7 @@ const baseUrl = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 const answerInlineQuery = (inlineQueryId, title, message) => {
   const inlineQueryResult = {
     type: 'article',
-    // id: uuidv4(),
+    id: uuidv4(),
     title,
     input_message_content: {
       message_text: message
@@ -62,8 +63,8 @@ const TelegramController = async (req, res, next) => {
       const command = req.body.inline_query.query;
       const id = req.body.inline_query.id;
       switch (command) {
-        case '/help':
-          answerInlineQuery(id, 'help', helpCommand);
+        case '/send':
+          answerInlineQuery(id, 'Send', 'Do you want to send?');
           break;
         default:
           break;
